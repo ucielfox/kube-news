@@ -20,7 +20,7 @@ pipeline {
             }            
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', credentialsId: 'DOCKER_PWD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PWD')]) {
                         sh 'docker login -u $DOCKER_USER -p $DOCKER_PWD'
                         sh 'docker push fabricioveronez/kube-news:$tag_version'
                         sh 'docker push fabricioveronez/kube-news:latest'
