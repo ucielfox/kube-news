@@ -3,9 +3,13 @@ pipeline {
 
     stages {
         stage ('Build Image') {
+            environment {
+                tag_version = "${env.BUILD_ID}"
+            }
             steps {
                 script {
-                    dockerapp = docker.build("fabricioveronez/kube-news:${env.BUILD_ID}", '-f ./src/Dockerfile ./src') 
+                    sh 'docker build -t fabricioveronez/kube-news:$tag_version -f ./src/Dockerfile ./src'
+                    
                 }                
             }
         }
