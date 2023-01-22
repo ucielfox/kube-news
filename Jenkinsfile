@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-		stage ('Build Image') {
+				stage ('Build Image') {
             environment {
                 tag_version = "${env.BUILD_ID}"
             }
@@ -10,6 +10,7 @@ pipeline {
                 script {
                     sh 'docker build -t fabricioveronez/kube-news:$tag_version -f ./src/Dockerfile ./src'
                     sh 'docker tag fabricioveronez/kube-news:$tag_version fabricioveronez/kube-news:latest'
+										sh 'docker image ls'
                 }                
             }
         }
