@@ -15,7 +15,7 @@ pipeline {
             }
         }
 
-	stage ('Push Image') {
+				stage ('Push Image') {
             environment {
                 tag_version = "${env.BUILD_ID}"
             }            
@@ -23,7 +23,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PWD')]) {
                         // sh 'docker login -u $DOCKER_USER -p $DOCKER_PWD'
-			sh 'echo $DOCKER_PWD | docker login -u $DOCKER_USER --password-stdin'
+												sh 'echo "$DOCKER_PWD" | docker login -u $DOCKER_USER --password-stdin'
                         sh 'docker push fabricioveronez/kube-news:$tag_version'
                         sh 'docker push fabricioveronez/kube-news:latest'
                     }
@@ -31,11 +31,15 @@ pipeline {
             }
         }
 
-        stage ('Deploy Kubernetes') {
+				stage ('Deploy Kubernetes') {
+            environment {
+                tag_version = "${env.BUILD_ID}"
+            }
             steps {
-                script {
-                    sh 'echo "Deploy no Kubernetes"'
-                }                
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'sed -i "s/{{tag}}/$tag_version/g" ./k8s/deployment.yaml'
+                    sh 'kubectl apply -f ./k8s/deployment.yaml --kubeconfig $KUBECONFIG'        
+                }
             }
         }
     }
