@@ -23,7 +23,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PWD')]) {
                         // sh 'docker login -u $DOCKER_USER -p $DOCKER_PWD'
-			sh 'echo $DOCKER_PWD | docker login -u $DOCKER_USER --password-stdin.'
+			sh 'echo $DOCKER_PWD | docker login -u $DOCKER_USER --password-stdin'
                         sh 'docker push fabricioveronez/kube-news:$tag_version'
                         sh 'docker push fabricioveronez/kube-news:latest'
                     }
