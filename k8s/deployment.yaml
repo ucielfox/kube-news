@@ -59,7 +59,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: ucielfox/kube-news:v2
+          image: ucielfox/kube-news:v1
           ports:
           - containerPort: 8080
           env:
